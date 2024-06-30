@@ -1,8 +1,9 @@
-import express from "express";
+import express, { NextFunction, Response, Request } from "express";
 
 //importing routes
 import userRoutes from "./routes/user";
 import { connectDB } from "./utils/features";
+import { errorMiddleware } from "./middlewares/error";
 const app = express();
 const port = 4000;
 connectDB();
@@ -15,6 +16,7 @@ app.get("/products", (req, res) => {
 app.get("/", (req, res) => {
   res.send("API is wprking bro!");
 });
+app.use(errorMiddleware);
 app.listen(port, () => {
   console.log(`Express is working on http://localhost:${port}`);
 });

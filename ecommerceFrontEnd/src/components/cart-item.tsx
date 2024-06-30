@@ -7,7 +7,6 @@ type CartItemProps = {
 
 const CartItem = ({ cartItem }: CartItemProps) => {
   const { photo, productId, name, price, quantity } = cartItem;
-  console.log(photo, price);
   return (
     <div className="cart-item">
       <img src={photo} alt={name} />
