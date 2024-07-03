@@ -1,4 +1,5 @@
 import { NextFunction, Request, Response } from "express";
+import { invalidatesCache } from "../utils/features";
 
 export interface NewUserRequestBody {
   name: string;
@@ -41,3 +42,9 @@ export interface IBaseQuery {
   };
   category?: string;
 }
+
+export type InvalidatesCacheProps = {
+  products?: boolean;
+  order?: boolean;
+  admin?: boolean;
+};
