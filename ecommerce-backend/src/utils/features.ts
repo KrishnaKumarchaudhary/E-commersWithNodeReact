@@ -3,9 +3,9 @@ import { InvalidatesCacheProps } from "../types/types";
 import { myCache } from "../app";
 import { Product } from "../models/products";
 
-export const connectDB = () => {
+export const connectDB = (uri:string) => {
   mongoose
-    .connect("mongodb://localhost:27017", { dbName: "Ecommerce24" })
+    .connect(uri, { dbName: "Ecommerce24" })
     .then((c) => console.log(`DB connect to ${c.connection.host}`))
     .catch((e) => console.log(e));
 };

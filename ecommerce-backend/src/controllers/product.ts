@@ -89,7 +89,7 @@ export const newProduct = TryCatch(
       stock,
       photo: photo?.path,
     });
-    await invalidatesCache({ product: true });
+    await invalidatesCache({ products: true });
     return res.status(201).json({
       success: true,
       message: "product has created successfully",
