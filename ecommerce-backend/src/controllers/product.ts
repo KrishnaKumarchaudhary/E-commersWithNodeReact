@@ -1,14 +1,14 @@
-import { NextFunction, Request, Response } from "express";
+import { Request } from "express";
+import { rm } from "fs";
+import { myCache } from "../app";
 import { TryCatch } from "../middlewares/error";
+import { Product } from "../models/products";
 import {
   IBaseQuery,
   NewProductRequestBody,
   SearchRequestQuery,
 } from "../types/types";
-import { Product } from "../models/products";
 import ErrorHandler from "../utils/utility-class";
-import { rm } from "fs";
-import { myCache } from "../app";
 //import { faker } from "@faker-js/faker";
 import { invalidatesCache } from "../utils/features";
 
@@ -23,7 +23,8 @@ export const getLatestProducts = TryCatch(async (req, res, next) => {
   }
   return res.status(201).json({
     success: true,
-    message: "product has created successfully",
+    message: "product has fetched successfully",
+    products,
   });
 });
 // Revalidate on new Update, Delete and new Order,
@@ -111,6 +112,7 @@ export const updateProduct = TryCatch(async (req, res, next) => {
   if (price) product.price = price;
   if (stock) product.stock = stock;
   await product.save();
+  await invalidatesCache({ products: true, productId: String(product._id) });
   return res.status(200).json({
     success: true,
     message: "product has updated successfully",
@@ -121,6 +123,7 @@ export const deleteProduct = TryCatch(async (req, res, next) => {
   if (!product) return next(new ErrorHandler("Product not found", 404));
   rm(product.photo!, () => console.log("Product photo deleted"));
   await product.deleteOne();
+  await invalidatesCache({ products: true, productId: String(product._id) });
   return res.status(201).json({
     success: true,
     message: "product has deleted",

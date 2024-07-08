@@ -10,12 +10,13 @@ export const errorMiddleware = (
 ) => {
   err.message ||= "Internal server Error";
   err.statusCode ||= 500;
+
+  if (err.name === "CastError") err.message = "Invalid ID";
   return res.status(err.statusCode).json({
     success: false,
     message: err.message,
   });
 };
-
 
 //TryCatch is wripper to reduce code for other code.
 export const TryCatch =
