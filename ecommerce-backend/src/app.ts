@@ -7,6 +7,7 @@ import { config } from "dotenv";
 import userRoutes from "./routes/user";
 import productRoutes from "./routes/products";
 import orderRoute from "./routes/order";
+import paymentRoute from "./routes/payment";
 import morgan from "morgan";
 config({ path: "./.env" });
 const app = express();
@@ -22,7 +23,7 @@ app.use(morgan("dev")); // to show response in terminal
 app.use("/api/v1/user", userRoutes);
 app.use("/api/v1/product", productRoutes);
 app.use("/api/v1/order", orderRoute);
-
+app.use("/api/v1/payment", paymentRoute);
 app.get("/products", (req, res) => {
   res.send("asdfds");
 });
@@ -36,3 +37,5 @@ app.listen(port, () => {
 });
 
 //4:06:15  03-07-2024
+//4:52:39  09-07-2024
+//4:55:42  10-07-2024
