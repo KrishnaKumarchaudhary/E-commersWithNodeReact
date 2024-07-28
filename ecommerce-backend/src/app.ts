@@ -8,7 +8,9 @@ import userRoutes from "./routes/user";
 import productRoutes from "./routes/products";
 import orderRoute from "./routes/order";
 import paymentRoute from "./routes/payment";
+import dashboardRoute from "./routes/stats";
 import morgan from "morgan";
+
 config({ path: "./.env" });
 const app = express();
 const port = process.env.PORT || 4000;
@@ -24,6 +26,7 @@ app.use("/api/v1/user", userRoutes);
 app.use("/api/v1/product", productRoutes);
 app.use("/api/v1/order", orderRoute);
 app.use("/api/v1/payment", paymentRoute);
+app.use("/api/v1/dashboard", dashboardRoute);
 app.get("/products", (req, res) => {
   res.send("asdfds");
 });
@@ -39,3 +42,5 @@ app.listen(port, () => {
 //4:06:15  03-07-2024
 //4:52:39  09-07-2024
 //4:55:42  10-07-2024
+//5:57:00  28-07-2024
+//6:23:24  28-07-2024
