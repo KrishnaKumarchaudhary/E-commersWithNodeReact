@@ -3,6 +3,7 @@ import { connectDB } from "./utils/features";
 import { errorMiddleware } from "./middlewares/error";
 import NodeCache from "node-cache";
 import { config } from "dotenv";
+import Stripe from "stripe";
 //importing routes
 import userRoutes from "./routes/user";
 import productRoutes from "./routes/products";
@@ -15,7 +16,9 @@ config({ path: "./.env" });
 const app = express();
 const port = process.env.PORT || 4000;
 const mongoURI = process.env.MONGO_URI || "";
+const stripeKey = process.env.STRIPE_KEY || "";
 connectDB(mongoURI);
+export const stripe = new Stripe(stripeKey);
 // for cache creating instance
 export const myCache = new NodeCache();
 app.use(express.json()); // this is middleware to convert req.body data into json formate
