@@ -90,7 +90,7 @@ export const newProduct = TryCatch(
       stock,
       photo: photo?.path,
     });
-    await invalidatesCache({ products: true });
+    invalidatesCache({ products: true, admin: true });
     return res.status(201).json({
       success: true,
       message: "product has created successfully",
@@ -112,7 +112,11 @@ export const updateProduct = TryCatch(async (req, res, next) => {
   if (price) product.price = price;
   if (stock) product.stock = stock;
   await product.save();
-  await invalidatesCache({ products: true, productId: String(product._id) });
+  invalidatesCache({
+    products: true,
+    productId: String(product._id),
+    admin: true,
+  });
   return res.status(200).json({
     success: true,
     message: "product has updated successfully",
@@ -123,7 +127,11 @@ export const deleteProduct = TryCatch(async (req, res, next) => {
   if (!product) return next(new ErrorHandler("Product not found", 404));
   rm(product.photo!, () => console.log("Product photo deleted"));
   await product.deleteOne();
-  await invalidatesCache({ products: true, productId: String(product._id) });
+  invalidatesCache({
+    products: true,
+    productId: String(product._id),
+    admin: true,
+  });
   return res.status(201).json({
     success: true,
     message: "product has deleted",

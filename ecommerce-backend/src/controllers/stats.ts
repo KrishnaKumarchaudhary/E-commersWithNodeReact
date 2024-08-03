@@ -287,4 +287,54 @@ export const getBarCharts = TryCatch(async (req, res, next) => {
     charts,
   });
 });
-export const getLineCharts = TryCatch(async () => {});
+export const getLineCharts = TryCatch(async (req, res, next) => {
+  let charts;
+  const key = "admin-line-charts";
+  if (myCache.has(key)) {
+    charts = JSON.parse(myCache.get(key) as string);
+  } else {
+    const today = new Date();
+
+    const twelveMonthAgo = new Date();
+    twelveMonthAgo.setMonth(twelveMonthAgo.getMonth() - 12);
+    const baseQuery = {
+      createdAt: {
+        $gte: twelveMonthAgo,
+        $lte: today,
+      },
+    };
+    const products: any = await Product.find(baseQuery).select("createdAt");
+    const users: any = await User.find(baseQuery).select("createdAt");
+    const orders: any = await Order.find(baseQuery).select([
+      "createdAt",
+      "discount",
+      "total",
+    ]);
+
+    const productCounts = getChartData({ length: 12, today, docArr: products });
+    const userCounts = getChartData({ length: 12, today, docArr: users });
+    const discount = getChartData({
+      length: 12,
+      today,
+      docArr: orders,
+      property: "discount",
+    });
+    const revenue = getChartData({
+      length: 12,
+      today,
+      docArr: orders,
+      property: "total",
+    });
+    charts = {
+      products: productCounts,
+      users: userCounts,
+      discount,
+      revenue,
+    };
+    myCache.set(key, JSON.stringify(charts));
+  }
+  return res.status(200).json({
+    success: true,
+    charts,
+  });
+});

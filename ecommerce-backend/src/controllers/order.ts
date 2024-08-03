@@ -72,7 +72,7 @@ export const newOrder = TryCatch(
       total,
     });
     await reduceStock(orderItems);
-    await invalidatesCache({
+    invalidatesCache({
       products: true,
       admin: true,
       order: true,
@@ -106,7 +106,7 @@ export const processOrder = TryCatch(async (req, res, next) => {
 
   await order.save();
 
-  await invalidatesCache({
+  invalidatesCache({
     products: false,
     order: true,
     admin: true,
@@ -128,7 +128,7 @@ export const deleteOrder = TryCatch(async (req, res, next) => {
 
   await order.deleteOne();
 
-  await invalidatesCache({
+  invalidatesCache({
     products: false,
     order: true,
     admin: true,

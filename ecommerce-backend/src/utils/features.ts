@@ -11,7 +11,7 @@ export const connectDB = (uri: string) => {
     .catch((e) => console.log(e));
 };
 
-export const invalidatesCache = async ({
+export const invalidatesCache = ({
   products,
   order,
   admin,
@@ -42,7 +42,13 @@ export const invalidatesCache = async ({
     ];
     myCache.del(ordersKeys);
   }
-  if (products) {
+  if (admin) {
+    myCache.del([
+      "admin-stats",
+      "admin-pie-charts",
+      "admin-bar-charts",
+      "admin-line-charts",
+    ]);
   }
 };
 
@@ -87,19 +93,27 @@ export const getInventories = async ({
 };
 interface myDocument extends Document {
   createAt: Date;
+  discount: number;
+  total: number;
 }
 type fincProps = {
   length: number;
   docArr: myDocument[];
   today: Date;
+  property?: "discount" | "total";
 };
-export const getChartData = ({ length, docArr, today }: fincProps) => {
+export const getChartData = ({
+  length,
+  docArr,
+  today,
+  property,
+}: fincProps) => {
   const data: number[] = new Array(length).fill(0);
   docArr.forEach((i: any) => {
     const creationDate = i.createdAt;
     const monthDiff = (today.getMonth() - creationDate.getMonth() + 12) % 12;
     if (monthDiff < length) {
-      data[length - monthDiff - 1] += 1;
+      data[length - monthDiff - 1] += property ? i[property]! : 1;
     }
   });
   return data;
