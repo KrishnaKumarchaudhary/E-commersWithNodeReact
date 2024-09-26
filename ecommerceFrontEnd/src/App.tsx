@@ -2,7 +2,7 @@ import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import { lazy, Suspense } from "react";
 import Loader from "./components/loader";
 import Header from "./components/header";
-
+import { Toaster } from "react-hot-toast";
 const OrderDetails = lazy(() => import("./pages/order-details"));
 const Login = lazy(() => import("./pages/login"));
 const Order = lazy(() => import("./pages/order"));
@@ -83,6 +83,7 @@ const App = () => {
           </Route>
         </Routes>
       </Suspense>
+      <Toaster position="bottom-center"></Toaster>
     </Router>
   );
 };
@@ -90,3 +91,4 @@ const App = () => {
 export default App;
 
 // 2:52:09
+// 14:36  04-08-2024
